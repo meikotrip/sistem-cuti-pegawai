@@ -16,11 +16,7 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('admin.user')" :active="request()->routeIs('user')">
-                        {{ __('Users') }}
-                    </x-nav-link>
-
-                    <x-nav-link :href="route('admin.leave-request')" :active="request()->routeIs('leave-request')">
+                    <x-nav-link :href="route('kahrd.leave-request')" :active="request()->routeIs('leave-request')">
                         {{ __('Leave Request') }}
                     </x-nav-link>
                 </div>

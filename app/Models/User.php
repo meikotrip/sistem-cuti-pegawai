@@ -46,6 +46,21 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isAdmin()
     {
-        return $this->role === 'superadmin'; // Sesuaikan dengan struktur kolom peran Anda
+        return $this->role === 'superadmin'; // tambah lagi bang
+    }
+
+    public function isKaHRD()
+    {
+        return $this->role ==='kahrd';
+    }
+
+    public function isKaDepartemen()
+    {
+        return $this->role ==='kadepartemen';
+    }
+
+    public function isKaryawan()
+    {
+        return $this->role ==='karyawan';
     }
 }

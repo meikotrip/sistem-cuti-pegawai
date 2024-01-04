@@ -21,8 +21,8 @@
                 <td>{{ $users[$i]['role'] }}</td>
                 <td>{{ $users[$i]['email'] }}</td>
                 <td>
-                    <a href="{{ route('user.edit', $users[$i]['id']) }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">Detail</a>
-                    <form action="{{ route('user.delete', $users[$i]['id']) }}" method="post" autocomplete="off">
+                    <a href="{{ route('admin.user.edit', $users[$i]['id']) }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">Detail</a>
+                    <form action="{{ route('admin.user.delete', $users[$i]['id']) }}" method="post" autocomplete="off">
                         @csrf
                         @method('delete')
                         <div class="d-flex justify-content-end">

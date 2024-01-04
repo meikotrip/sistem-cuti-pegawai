@@ -1,5 +1,5 @@
 <section>
-    <form method="POST" action="{{ route('user.edit', $user['id']) }}">
+    <form method="POST" action="{{ route('admin.user.edit', $user['id']) }}">
         @csrf
 
         <!-- Name -->

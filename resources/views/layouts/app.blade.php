@@ -26,6 +26,10 @@
             {{-- kasih if else navigasi utk karyawan, ka hrd, ka departemen --}}
             @if (auth()->check() && auth()->user()->isAdmin())
                 @include('layouts.admin-navigation')
+            @elseif (auth()->check() && auth()->user()->isKadepartemen())
+                @include('layouts.kadepartemen-navigation')
+            @elseif (auth()->check() && auth()->user()->isKahrd())
+                @include('layouts.kahrd-navigation')
             @else
                 @include('layouts.navigation')
             @endif
