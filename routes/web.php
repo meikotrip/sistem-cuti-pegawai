@@ -39,8 +39,11 @@ Route::middleware('auth')->group(function () {
 Route::get('/admin/users', [UserController::class, 'dashboard'])->
 middleware(['auth','admin'])->name('admin.user');
 Route::get('/admin/users/{id}', [UserController::class, 'form'])->
+middleware(['auth','admin'])->name('admin.user.form');
+Route::put('/admin/users/{id}', [UserController::class, 'edit'])->
 middleware(['auth','admin'])->name('admin.user.edit');
-Route::post('/admin/users/{id}', [UserController::class, 'edit']);
+Route::post('/admin/users/{id}', [UserController::class, 'addUserDivision'])->
+middleware(['auth','admin'])->name('admin.user.addUserDivision');
 Route::delete('/admin/users/{id}', [UserController::class, 'delete'])->
 middleware(['auth','admin'])->name('admin.user.delete');
 
@@ -48,6 +51,8 @@ middleware(['auth','admin'])->name('admin.user.delete');
 // Admin, Karyawan, Kadepartemen, Kahrd (LeaveRequest Control)
 Route::get('/admin/leave-request', [LeaveRequestController::class, 'dashboard'])
 ->middleware(['auth','admin'])->name('admin.leave-request');
+Route::get('/admin/leave-request/download', [LeaveRequestController::class, 'download'])
+->middleware(['auth','admin'])->name('admin.leave-request.download');
 Route::delete('/admin/leave-request/{id}', [LeaveRequestController::class, 'delete'])
 ->middleware(['auth','admin'])->name('admin.leave-request.delete');
 Route::get('/admin/leave-request/form/{id}', [LeaveRequestController::class, 'form'])
@@ -62,6 +67,8 @@ Route::post('/kadepartemen/leave-request/form/{id}', [LeaveRequestController::cl
 
 Route::get('/kahrd/leave-request', [LeaveRequestController::class, 'dashboard'])
 ->middleware(['auth','kahrd'])->name('kahrd.leave-request');
+Route::get('/kahrd/leave-request/download', [LeaveRequestController::class, 'download'])
+->middleware(['auth','kahrd'])->name('kahrd.leave-request.download');
 Route::get('/kahrd/leave-request/form/{id}', [LeaveRequestController::class, 'form'])
 ->middleware(['auth','kahrd'])->name('kahrd.leave-request.edit');
 Route::post('/kahrd/leave-request/form/{id}', [LeaveRequestController::class, 'edit']);

@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserDivision;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+
+use function Laravel\Prompts\table;
 
 class UserController extends Controller
 {
@@ -21,8 +26,17 @@ class UserController extends Controller
     public function form($id): View {
         $user = User::where('id', $id)->firstOrFail();
 
+        $user_division = UserDivision::join('users', 'user_divisions.idUser', '=', 'users.id')
+        ->join('divisions', 'user_divisions.idDivisi', '=', 'divisions.id')
+        ->where('user_divisions.idUser', $user->id)->get();
+
         $data = [
             "user" => $user,
+            "user_division" => $user_division
+            // "user" => json_decode(DB::table('user_division')
+            // ->join('users', 'user_division.idUser', '=', 'users.id')
+            // ->join('divisions', 'user_division.idDivisi', '=', 'divisions.id')
+            // ->get(), true),
         ];
 
         return view('admin.user.form', $data);
@@ -71,4 +85,42 @@ class UserController extends Controller
             return redirect()->back()->with('success', 'User deleted');
         }
     }
+
+    public function addUserDivision(Request $request) {
+        $request->validate([
+            'idUser' => ['required'],
+            'idDivisi' => ['required']
+        ]);
+
+        $data = [
+            'idUser' => $request->idUser,
+            'idDivisi' => $request->idDivisi,
+        ];
+
+        UserDivision::updateOrInsert(
+            ['idUser' => $request->idUser],
+            $data
+        );
+
+        return redirect()->back()->with('success', 'User division added successfully');
+
+
+        // $userDivision = new UserDivision($request->all());
+
+        // if ($userDivision->save()) {
+        //     return redirect()->back()->with('success', 'User division added successfully');
+        // }
+
+        // return redirect()->back()->with('error', 'User division cant added, Try Again');
+
+        
+        // $data = [
+        //     'idUser' => $request->input('idUser'),
+        //     'idDivisi' => $request->input('idDivisi')
+        // ];
+
+        // DB::table('user_division')->insert($data);
+
+        // return redirect()->back()->with('success', 'User division added successfully');
+    } 
 }

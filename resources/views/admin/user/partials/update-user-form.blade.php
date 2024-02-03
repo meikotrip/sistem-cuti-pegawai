@@ -1,6 +1,13 @@
 <section>
+    <header>
+        <h2 class="text-lg font-semibold text-gray-900 mb-5">
+            {{ __('User Information') }}
+        </h2>
+    </header>
+
     <form method="POST" action="{{ route('admin.user.edit', $user['id']) }}">
         @csrf
+        @method('put')
 
         <!-- Name -->
         <div>

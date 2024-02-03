@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LeaveRequest;
+use App\Models\UserDivision;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,10 +30,6 @@ class LeaveRequestController extends Controller
             'data' => $data,
             'id' => $id,
         ]);
-    }
-
-    public function detail(Request $request) {
-
     }
 
     public function store(Request $request) {
@@ -76,6 +73,21 @@ class LeaveRequestController extends Controller
                     ->join('divisions', 'leave_requests.idDivisi', '=', 'divisions.id')
                     ->where('leave_requests.isAcceptedKadepartemen', 'accepted')
                     ->get(), true),
+            ];
+    
+            return view('leaveRequest.dashboard', $data);
+        } elseif ($user->role === 'kadepartemen') {
+
+            $user_division = UserDivision::join('users', 'user_divisions.idUser', '=', 'users.id')
+            ->join('divisions', 'user_divisions.idDivisi', '=', 'divisions.id')
+            ->where('user_divisions.idUser', $user->id)->get();
+
+            $data = [
+                "leaveRequests" => json_decode(DB::table('leave_requests')
+                    ->join('users', 'leave_requests.idUser', '=', 'users.id')
+                    ->join('divisions', 'leave_requests.idDivisi', '=', 'divisions.id')
+                    ->get(), true),
+                "user_divisions" => $user_division
             ];
     
             return view('leaveRequest.dashboard', $data);
@@ -125,5 +137,25 @@ class LeaveRequestController extends Controller
         if ($leaveRequest->delete()) {
             return redirect()->back()->with('success', 'Permintaan Cuti deleted');
         }
+    }
+
+    public function download() {
+
+        $data = [
+            "leaveRequests" => json_decode(DB::table('leave_requests')
+                ->join('users', 'leave_requests.idUser', '=', 'users.id')
+                ->join('divisions', 'leave_requests.idDivisi', '=', 'divisions.id')
+                ->where('leave_requests.isAcceptedKadepartemen', 'accepted')
+                ->get(), true),
+        ];
+
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => [190, 236],
+            'orientation' => 'L'
+        ]);
+        $mpdf->WriteHTML(view("leaverequest.partials.table-download",$data));
+        $mpdf->Output();
+        // $mpdf->Output('report-cuti-pegawai.pdf', 'D');
     }
 }
